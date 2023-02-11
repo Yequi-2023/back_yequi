@@ -69,7 +69,11 @@ async def view_crear_usuario(usuario2: CapturaDatos3):
             raise ExceptionCustumizada('')
         else:
         # print (informacion[0][0])
-            return "Cuenta con celular "+str(informacion[0][0])+" creada correctamente"
+            return  {
+            "status": 200,
+            "results": "Cuenta con celular "+str(informacion[0][0])+" creada correctamente",
+            "msg":"Pago exitoso"
+             } 
     except ExceptionCustumizada:
         return "error"
 
