@@ -4,6 +4,7 @@ from schemas.login import CapturaDatos
 from schemas.login import CapturaDatos2
 from schemas.login import LoginUsuario
 from schemas.login import Mostrar
+import json
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -34,6 +35,13 @@ async def view_datos(usuario: CapturaDatos2):
         if informacion == []:
             raise ExceptionCustumizada('')
         else:
-            return informacion
+            respuesta = []
+            for registro in informacion:
+                objeto = {
+                    "saldo": registro[0],
+                    "nombre": registro[1]
+                }
+                respuesta.append(objeto)
+            return json.loads(json.dumps(respuesta))
     except ExceptionCustumizada:
         return "El usuario no existe"
