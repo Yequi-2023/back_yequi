@@ -4,6 +4,8 @@ from schemas.login import CapturaDatos, CapturaDatos2, LoginUsuario, Mostrar
 from schemas.transferencia import Captura_transferencia, Realizar_tranfer
 from schemas.pagos import Captura_pago, Realizar_pago
 from schemas.crear_cuenta import CapturaDatos3, CrearUsuario
+from schemas.recaudos import Captura_recaudo, Realizar_recaudo
+from schemas.retiros import Captura_retiro, Realizar_retiro
 import json
 from schemas.login import mostrar_servicios_publicos
 
@@ -92,6 +94,30 @@ async def view_datos(pago: Captura_pago):
     try:
         rta_mostrar = Realizar_pago(pago)
         informacion = rta_mostrar.ejecutar_pago()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "Pago fallido"
+
+@mi_api_router.post("/recaudos")
+async def view_datos(recaudo: Captura_recaudo):
+    try:
+        rta_mostrar = Realizar_recaudo(recaudo)
+        informacion = rta_mostrar.ejecutar_recaudo()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "Pago fallido"
+
+@mi_api_router.post("/retiros")
+async def view_datos(retiro: Captura_retiro):
+    try:
+        rta_mostrar = Realizar_retiro(retiro)
+        informacion = rta_mostrar.ejecutar_retiro()
         if informacion == []:
             raise ExceptionCustumizada('')
         else:
