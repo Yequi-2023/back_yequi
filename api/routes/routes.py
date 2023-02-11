@@ -75,7 +75,7 @@ async def view_crear_usuario(usuario2: CapturaDatos3):
             return  {
             "status": 200,
             "results": "Cuenta con celular "+str(informacion[0][0])+" creada correctamente",
-            "msg":"Pago exitoso"
+            "msg":"Creación exitosa"
              } 
     except ExceptionCustumizada:
         return "error"
