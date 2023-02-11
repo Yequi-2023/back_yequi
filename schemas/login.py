@@ -58,3 +58,14 @@ class Mostrar():
         result = cursor.fetchall()
         get_close_db(conn)
         return result
+    
+def mostrar_servicios_publicos():
+        """VListar servicios publicos"""
+        conn = get_db()
+        cursor = conn.cursor()
+        query = f"""SELECT public.tbl_tipo_recaudos.nombre_convenio
+                FROM public.tbl_tipo_recaudos"""
+        cursor.execute(query)
+        result = cursor.fetchall()
+        get_close_db(conn)
+        return result
