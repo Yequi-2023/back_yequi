@@ -1,6 +1,7 @@
 """Login"""
 from pydantic import BaseModel
-from db.conection import get_db,get_close_db
+from db.conection import get_db, get_close_db
+
 
 class CapturaDatos(BaseModel):
     """Captura datos"""
@@ -9,6 +10,7 @@ class CapturaDatos(BaseModel):
 
 class LoginUsuario:
     """Login usuario"""
+
     def __init__(self, model: CapturaDatos):
         self.usuario = model.usuario
         self.contrasena = model.contrasena
@@ -17,11 +19,30 @@ class LoginUsuario:
         """Validar si existe usuario"""
         conn = get_db()
         cursor = conn.cursor()
-        query = f"""SELECT public.tbl_usuario.nombre_usuario
-            FROM public.tbl_usuario
-            WHERE telefono = '{self.usuario}' AND password = '{self.contrasena}'"""
+        query = f"""SELECT public.tbl_usuarios.pk_id_celular
+            FROM public.tbl_usuarios
+            WHERE public.tbl_usuarios.pk_id_celular = '{self.usuario}' AND public.tbl_usuarios.pass = '{self.contrasena}'"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
         return result
-        
+
+class CapturaDatos2(BaseModel):
+    """Captura datos"""
+    usuario: int
+
+class Mostrar():
+    def __init__(self, model: CapturaDatos2):
+        self.usuario = model.usuario
+
+    def mostrar_informacion(self):
+        """Validar si existe usuario"""
+        conn = get_db()
+        cursor = conn.cursor()
+        query = f"""SELECT public.tbl_usuarios.saldo, public.tbl_usuarios.nombre
+                FROM public.tbl_usuarios
+                WHERE public.tbl_usuarios.pk_id_celular= '{self.usuario}'"""
+        cursor.execute(query)
+        result = cursor.fetchall()
+        get_close_db(conn)
+        return result

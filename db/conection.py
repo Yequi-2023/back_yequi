@@ -5,7 +5,7 @@ def get_db():
     """Conexion bd carretera"""
     conn = psycopg2.connect(
         host='localhost',
-        database = 'yequi',
+        database = 'yequinuevo',
         user='postgres',
         password='123456'
     )

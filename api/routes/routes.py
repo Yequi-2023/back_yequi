@@ -1,7 +1,9 @@
 """Routes"""
 from fastapi import APIRouter
 from schemas.login import CapturaDatos
+from schemas.login import CapturaDatos2
 from schemas.login import LoginUsuario
+from schemas.login import Mostrar
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -23,3 +25,15 @@ async def view_login(user: CapturaDatos):
     except ExceptionCustumizada:
         return "error"
     
+@mi_api_router.post("/mostrar_datos")
+async def view_datos(usuario: CapturaDatos2):
+    """Acceso"""
+    try:
+        rta_mostrar = Mostrar(usuario)
+        informacion = rta_mostrar.mostrar_informacion()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "El usuario no existe"
