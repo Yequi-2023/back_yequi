@@ -5,6 +5,7 @@ from schemas.login import CapturaDatos2
 from schemas.login import LoginUsuario
 from schemas.login import Mostrar
 import json
+from schemas.login import mostrar_servicios_publicos
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -45,3 +46,16 @@ async def view_datos(usuario: CapturaDatos2):
             return json.loads(json.dumps(respuesta))
     except ExceptionCustumizada:
         return "El usuario no existe"
+
+@mi_api_router.post("/mostrar_servicios_publicos")
+async def view_datos():
+    """Acceso"""
+    try:
+        rta_servicios_publicos= mostrar_servicios_publicos()
+        informacion = rta_servicios_publicos
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "No existen convenios de servicios publicos"
