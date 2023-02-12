@@ -14,8 +14,10 @@ mi_api_router = APIRouter(
     prefix="/mi_api"
 )
 
+
 class ExceptionCustumizada(Exception):
     "Excepcion tipo no existe"
+
 
 @mi_api_router.post("/login")
 async def view_login(user: CapturaDatos):
@@ -29,7 +31,8 @@ async def view_login(user: CapturaDatos):
             return informacion
     except ExceptionCustumizada:
         return "error"
-    
+
+
 @mi_api_router.post("/mostrar_datos")
 async def view_datos(usuario: CapturaDatos2):
     """Acceso"""
@@ -50,17 +53,22 @@ async def view_datos(usuario: CapturaDatos2):
     except ExceptionCustumizada:
         return "El usuario no existe"
 
-@mi_api_router.post("/transfer")
+
+@mi_api_router.post("/transferencia")
 async def view_datos(transferencia: Captura_transferencia):
     try:
         rta_mostrar = Realizar_tranfer(transferencia)
-        informacion = rta_mostrar.ejecutar_transfer()
-        if informacion == []:
-            raise ExceptionCustumizada('')
+        validaciones = rta_mostrar.exista_cuenta()
+        if validaciones != []:
+            informacion_usuario = rta_mostrar.validar_saldo()
+            if informacion_usuario != []:
+                informacion = rta_mostrar.ejecutar_transfer()
+                return informacion
         else:
-            return informacion
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
-        return "transferencia fallida"
+        return "Transferencia Fallida"
+
 
 @mi_api_router.post("/crear_usuario")
 async def view_crear_usuario(usuario2: CapturaDatos3):
@@ -71,20 +79,21 @@ async def view_crear_usuario(usuario2: CapturaDatos3):
         if informacion == []:
             raise ExceptionCustumizada('')
         else:
-        # print (informacion[0][0])
-            return  {
-            "status": 200,
-            "results": "Cuenta con celular "+str(informacion[0][0])+" creada correctamente",
-            "msg":"Pago exitoso"
-             } 
+            # print (informacion[0][0])
+            return {
+                "status": 200,
+                "results": "Cuenta con celular "+str(informacion[0][0])+" creada correctamente",
+                "msg": "Creación exitosa"
+            }
     except ExceptionCustumizada:
         return "error"
+
 
 @mi_api_router.post("/mostrar_servicios_publicos")
 async def view_datos():
     """Acceso"""
     try:
-        rta_servicios_publicos= mostrar_servicios_publicos()
+        rta_servicios_publicos = mostrar_servicios_publicos()
         informacion = rta_servicios_publicos
         if informacion == []:
             raise ExceptionCustumizada('')
@@ -106,17 +115,22 @@ async def view_datos(pago: Captura_pago):
     except ExceptionCustumizada:
         return "Pago fallido"
 
+
 @mi_api_router.post("/recaudos")
 async def view_datos(recaudo: Captura_recaudo):
     try:
         rta_mostrar = Realizar_recaudo(recaudo)
-        informacion = rta_mostrar.ejecutar_recaudo()
-        if informacion == []:
-            raise ExceptionCustumizada('')
+        validaciones = rta_mostrar.tipo_pago()
+        if validaciones != []:
+            informacion_usuario = rta_mostrar.validar_saldo()
+            if informacion_usuario != []:
+                informacion = rta_mostrar.ejecutar_recaudo()
+                return informacion
         else:
-            return informacion
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
-        return "Pago fallido"
+        return "Recaudo Fallido"
+
 
 @mi_api_router.post("/retiros")
 async def view_datos(retiro: Captura_retiro):
@@ -130,6 +144,7 @@ async def view_datos(retiro: Captura_retiro):
     except ExceptionCustumizada:
         return "Pago fallido"
 
+
 @mi_api_router.get("/historial")
 async def view_datos(usuario: int):
     try:
@@ -141,4 +156,3 @@ async def view_datos(usuario: int):
             return informacion
     except ExceptionCustumizada:
         return "Pago fallido"
-

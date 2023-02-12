@@ -8,6 +8,7 @@ class Captura_pago(BaseModel):
     referencia: int
     monto: int
     descripcion: str
+    tipoRecaudo: int
 
 class Realizar_pago():
     """Clase para realizar el pago directamente"""
@@ -16,11 +17,12 @@ class Realizar_pago():
         self.descripcion=modelo.descripcion
         self.usuario=modelo.usuario
         self.referencia=modelo.referencia
+        self.tipoRecaudo=modelo.tipoRecaudo
 
     def ejecutar_pago(self):
         conn = get_db()
         cursor = conn.cursor()
-        query = "INSERT INTO tbl_pagos (monto,descripcion,referencia_pago,fk_id_usuario) VALUES({},'{}',{},{})".format(self.monto,self.descripcion,self.referencia,self.usuario)
+        query = "INSERT INTO public.tbl_recaudos (monto,descripcion,referencia,fk_id_usuario,fk_id_tipo_recaudo) VALUES({},'{}',{},{},{})".format(self.monto,self.descripcion,self.referencia,self.usuario,self.tipoRecaudo)
         cursor.execute(query)
         conn.commit()
         get_close_db(conn)
