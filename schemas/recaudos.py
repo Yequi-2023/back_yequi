@@ -25,19 +25,19 @@ class Realizar_recaudo():
         cursor = conn.cursor()
         query = f"""SELECT public.tbl_tipo_recaudos.pk_id_tipo_recaudo
                 FROM public.tbl_tipo_recaudos
-                WHERE public.tbl_tipo_recaudos='{self.referencia}'"""
+                WHERE public.tbl_tipo_recaudos.pk_id_tipo_recaudo='{self.tipoRecaudo}'"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
         return result
 
     def validar_saldo(self):
-        """Listar servicios publicos"""
+        """Validar saldo"""
         conn = get_db()
         cursor = conn.cursor()
         query = f"""SELECT public.tbl_usuarios.pk_id_celular,public.tbl_usuarios.saldo
                 FROM public.tbl_usuarios
-                WHERE public.tbl_usuarios.pk_id_celular='{self.usuario}' AND (public.tbl_usuarios.saldo >= '{self.referencia}')"""
+                WHERE public.tbl_usuarios.pk_id_celular='{self.usuario}' AND (public.tbl_usuarios.saldo >= '{self.monto}')"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)

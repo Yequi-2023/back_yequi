@@ -120,9 +120,9 @@ async def view_datos(recaudo: Captura_recaudo):
         validaciones = rta_mostrar.tipo_pago()
         if validaciones != []:
             informacion_usuario = rta_mostrar.validar_saldo()
-        elif informacion_usuario != []:
-            informacion = rta_mostrar.ejecutar_recaudo()
-            return informacion
+            if informacion_usuario != []:
+                informacion = rta_mostrar.ejecutar_recaudo()
+                return informacion
         else:
             raise ExceptionCustumizada('')
     except ExceptionCustumizada:
