@@ -19,29 +19,6 @@ class Realizar_pago():
         self.referencia=modelo.referencia
         self.tipoRecaudo=modelo.tipoRecaudo
 
-    def tipo_pago(self):
-        """Listar servicios publicos"""
-        conn = get_db()
-        cursor = conn.cursor()
-        query = f"""SELECT public.tbl_tipo_recaudos.pk_id_tipo_recaudo
-                FROM public.tbl_tipo_recaudos"""
-        cursor.execute(query)
-        result = cursor.fetchall()
-        get_close_db(conn)
-        return result
-
-    def validar_saldo(self):
-        """Listar servicios publicos"""
-        conn = get_db()
-        cursor = conn.cursor()
-        query = f"""SELECT public.tbl_usuarios.pk_id_celular,public.tbl_usuarios.saldo
-                FROM public.tbl_usuarios
-                WHERE public.tbl_usuarios.pk_id_celular= '{self.usuario}'"""
-        cursor.execute(query)
-        result = cursor.fetchall()
-        get_close_db(conn)
-        return result
-
     def ejecutar_pago(self):
         conn = get_db()
         cursor = conn.cursor()

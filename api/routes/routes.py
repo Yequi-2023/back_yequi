@@ -54,17 +54,20 @@ async def view_datos(usuario: CapturaDatos2):
         return "El usuario no existe"
 
 
-@mi_api_router.post("/transfer")
+@mi_api_router.post("/transferencia")
 async def view_datos(transferencia: Captura_transferencia):
     try:
         rta_mostrar = Realizar_tranfer(transferencia)
-        informacion = rta_mostrar.ejecutar_transfer()
-        if informacion == []:
-            raise ExceptionCustumizada('')
+        validaciones = rta_mostrar.exista_cuenta()
+        if validaciones != []:
+            informacion_usuario = rta_mostrar.validar_saldo()
+            if informacion_usuario != []:
+                informacion = rta_mostrar.ejecutar_transfer()
+                return informacion
         else:
-            return informacion
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
-        return "transferencia fallida"
+        return "Transferencia Fallida"
 
 
 @mi_api_router.post("/crear_usuario")
