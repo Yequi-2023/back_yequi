@@ -4,39 +4,26 @@ from db.conection import get_db, get_close_db
 
 class Captura_pago(BaseModel):
     """Captura datos del pago"""
-    usuario: int
-    referencia: int
     monto: int
     descripcion: str
-    tipoRecaudo: int
+    referencia: int
+    usuario: int
 
 class Realizar_pago():
     """Clase para realizar el pago directamente"""
     def __init__(self, modelo: Captura_pago):
         self.monto=modelo.monto
         self.descripcion=modelo.descripcion
-        self.usuario=modelo.usuario
         self.referencia=modelo.referencia
-        self.tipoRecaudo=modelo.tipoRecaudo
-
-    def tipo_pago(self):
-        """Listar servicios publicos"""
-        conn = get_db()
-        cursor = conn.cursor()
-        query = f"""SELECT public.tbl_tipo_recaudos.pk_id_tipo_recaudo
-                FROM public.tbl_tipo_recaudos"""
-        cursor.execute(query)
-        result = cursor.fetchall()
-        get_close_db(conn)
-        return result
+        self.usuario=modelo.usuario
 
     def validar_saldo(self):
-        """Listar servicios publicos"""
+        """Validar si tiene saldo superior para el pago"""
         conn = get_db()
         cursor = conn.cursor()
         query = f"""SELECT public.tbl_usuarios.pk_id_celular,public.tbl_usuarios.saldo
                 FROM public.tbl_usuarios
-                WHERE public.tbl_usuarios.pk_id_celular= '{self.usuario}'"""
+                WHERE public.tbl_usuarios.pk_id_celular='{self.usuario}' AND (public.tbl_usuarios.saldo >= '{self.monto}')"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
@@ -45,7 +32,7 @@ class Realizar_pago():
     def ejecutar_pago(self):
         conn = get_db()
         cursor = conn.cursor()
-        query = "INSERT INTO public.tbl_recaudos (monto,descripcion,referencia,fk_id_usuario,fk_id_tipo_recaudo) VALUES({},'{}',{},{},{})".format(self.monto,self.descripcion,self.referencia,self.usuario,self.tipoRecaudo)
+        query = "INSERT INTO public.tbl_pagos (monto,descripcion,referencia_pago,fk_id_usuario) VALUES({},'{}',{},{})".format(self.monto,self.descripcion,self.referencia,self.usuario)
         cursor.execute(query)
         conn.commit()
         get_close_db(conn)

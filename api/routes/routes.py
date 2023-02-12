@@ -1,6 +1,6 @@
 """Routes"""
 from fastapi import APIRouter
-from schemas.login import CapturaDatos, CapturaDatos2, LoginUsuario, Mostrar
+from schemas.login import CapturaDatos, CapturaDatos2, LoginUsuario, Mostrar, LoginCorresponsal
 from schemas.transferencia import Captura_transferencia, Realizar_tranfer
 from schemas.pagos import Captura_pago, Realizar_pago
 from schemas.crear_cuenta import CapturaDatos3, CrearUsuario
@@ -8,7 +8,7 @@ from schemas.recaudos import Captura_recaudo, Realizar_recaudo
 from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
 import json
-from schemas.login import mostrar_servicios_publicos
+
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -25,6 +25,20 @@ async def view_login(user: CapturaDatos):
     try:
         rta_login = LoginUsuario(user)
         informacion = rta_login.validacion()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "error"
+
+
+@mi_api_router.post("/loginCorresponsal")
+async def view_login_corresponsal(user: CapturaDatos):
+    """Acceso"""
+    try:
+        rta_login = LoginCorresponsal(user)
+        informacion = rta_login.validacion_corresponsal()
         if informacion == []:
             raise ExceptionCustumizada('')
         else:
@@ -54,17 +68,20 @@ async def view_datos(usuario: CapturaDatos2):
         return "El usuario no existe"
 
 
-@mi_api_router.post("/transfer")
+@mi_api_router.post("/transferencia")
 async def view_datos(transferencia: Captura_transferencia):
     try:
         rta_mostrar = Realizar_tranfer(transferencia)
-        informacion = rta_mostrar.ejecutar_transfer()
-        if informacion == []:
-            raise ExceptionCustumizada('')
+        validaciones = rta_mostrar.exista_cuenta()
+        if validaciones != []:
+            informacion_usuario = rta_mostrar.validar_saldo()
+            if informacion_usuario != []:
+                informacion = rta_mostrar.ejecutar_transfer()
+                return informacion
         else:
-            return informacion
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
-        return "transferencia fallida"
+        return "Cuenta destino no existe"
 
 
 @mi_api_router.post("/crear_usuario")
@@ -86,29 +103,16 @@ async def view_crear_usuario(usuario2: CapturaDatos3):
         return "error"
 
 
-@mi_api_router.post("/mostrar_servicios_publicos")
-async def view_datos():
-    """Acceso"""
-    try:
-        rta_servicios_publicos = mostrar_servicios_publicos()
-        informacion = rta_servicios_publicos
-        if informacion == []:
-            raise ExceptionCustumizada('')
-        else:
-            return informacion
-    except ExceptionCustumizada:
-        return "No existen convenios de servicios publicos"
-
-
 @mi_api_router.post("/pagos")
 async def view_datos(pago: Captura_pago):
     try:
         rta_mostrar = Realizar_pago(pago)
-        informacion = rta_mostrar.ejecutar_pago()
-        if informacion == []:
-            raise ExceptionCustumizada('')
-        else:
+        validaciones = rta_mostrar.validar_saldo()
+        if validaciones != []:
+            informacion = rta_mostrar.ejecutar_pago()
             return informacion
+        else:
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
         return "Pago fallido"
 
