@@ -8,7 +8,6 @@ from schemas.recaudos import Captura_recaudo, Realizar_recaudo
 from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
 import json
-from schemas.login import mostrar_servicios_publicos
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -21,6 +20,20 @@ class ExceptionCustumizada(Exception):
 
 @mi_api_router.post("/login")
 async def view_login(user: CapturaDatos):
+    """Acceso"""
+    try:
+        rta_login = LoginUsuario(user)
+        informacion = rta_login.validacion()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "error"
+
+
+@mi_api_router.post("/loginCorresponsal")
+async def view_login_corresponsal(user: CapturaDatos):
     """Acceso"""
     try:
         rta_login = LoginUsuario(user)
@@ -87,20 +100,6 @@ async def view_crear_usuario(usuario2: CapturaDatos3):
             }
     except ExceptionCustumizada:
         return "error"
-
-
-@mi_api_router.post("/mostrar_servicios_publicos")
-async def view_datos():
-    """Acceso"""
-    try:
-        rta_servicios_publicos = mostrar_servicios_publicos()
-        informacion = rta_servicios_publicos
-        if informacion == []:
-            raise ExceptionCustumizada('')
-        else:
-            return informacion
-    except ExceptionCustumizada:
-        return "No existen convenios de servicios publicos"
 
 
 @mi_api_router.post("/pagos")

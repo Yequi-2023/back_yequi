@@ -26,18 +26,7 @@ class LoginUsuario:
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
-        return {
-            "status": 200,
-            "results":{
-                "cuenta": result[0][0],
-                "name": result[0][1],
-                "pass": result[0][2],
-                "email": result[0][3],
-                "saldo": result[0][4],
-                "rol":result[0][5]
-            },
-            "msg":"Peticion correcta"
-        }
+        return result
 
 class CapturaDatos2(BaseModel):
     """Captura datos"""
@@ -59,13 +48,3 @@ class Mostrar():
         get_close_db(conn)
         return result
     
-def mostrar_servicios_publicos():
-        """VListar servicios publicos"""
-        conn = get_db()
-        cursor = conn.cursor()
-        query = f"""SELECT public.tbl_tipo_recaudos.nombre_convenio
-                FROM public.tbl_tipo_recaudos"""
-        cursor.execute(query)
-        result = cursor.fetchall()
-        get_close_db(conn)
-        return result
