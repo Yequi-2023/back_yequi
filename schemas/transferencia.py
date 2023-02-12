@@ -9,8 +9,6 @@ class Captura_transferencia(BaseModel):
     usuario_origen: int
     usuario_destino: int
     
-    
-
 class Realizar_tranfer():
     """Clase para realizar la transferencia directamente"""
     def __init__(self, modelo: Captura_transferencia):
@@ -25,7 +23,7 @@ class Realizar_tranfer():
         cursor = conn.cursor()
         query = f"""SELECT public.tbl_usuarios.pk_id_celular
                 FROM public.tbl_usuarios
-                WHERE public.tbl_usuarios.pk_id_celular='{self.usuario_destino}'"""
+                WHERE public.tbl_usuarios.pk_id_celular='{self.usuario_destino}' AND public.tbl_usuarios.pk_id_celular!='{self.usuario_origen}' AND public.tbl_usuarios.rol !='corresponsal'"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
