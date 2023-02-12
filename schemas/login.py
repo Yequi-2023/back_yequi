@@ -48,3 +48,21 @@ class Mostrar():
         get_close_db(conn)
         return result
     
+class LoginCorresponsal:
+    """Login usuario"""
+
+    def __init__(self, model: CapturaDatos):
+        self.usuario = model.usuario
+        self.contrasena = model.contrasena
+
+    def validacion_corresponsal(self):
+        """Validar si existe usuario"""
+        conn = get_db()
+        cursor = conn.cursor()
+        query = f"""SELECT public.tbl_usuarios.rol
+            FROM public.tbl_usuarios
+            WHERE public.tbl_usuarios.pk_id_celular = '{self.usuario}' AND public.tbl_usuarios.pass = '{self.contrasena}' AND public.tbl_usuarios.rol='corresponsal'"""
+        cursor.execute(query)
+        result = cursor.fetchall()
+        get_close_db(conn)
+        return result

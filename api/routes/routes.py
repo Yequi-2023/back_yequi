@@ -1,6 +1,6 @@
 """Routes"""
 from fastapi import APIRouter
-from schemas.login import CapturaDatos, CapturaDatos2, LoginUsuario, Mostrar
+from schemas.login import CapturaDatos, CapturaDatos2, LoginUsuario, Mostrar, LoginCorresponsal
 from schemas.transferencia import Captura_transferencia, Realizar_tranfer
 from schemas.pagos import Captura_pago, Realizar_pago
 from schemas.crear_cuenta import CapturaDatos3, CrearUsuario
@@ -8,6 +8,7 @@ from schemas.recaudos import Captura_recaudo, Realizar_recaudo
 from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
 import json
+
 
 mi_api_router = APIRouter(
     prefix="/mi_api"
@@ -36,8 +37,8 @@ async def view_login(user: CapturaDatos):
 async def view_login_corresponsal(user: CapturaDatos):
     """Acceso"""
     try:
-        rta_login = LoginUsuario(user)
-        informacion = rta_login.validacion()
+        rta_login = LoginCorresponsal(user)
+        informacion = rta_login.validacion_corresponsal()
         if informacion == []:
             raise ExceptionCustumizada('')
         else:
