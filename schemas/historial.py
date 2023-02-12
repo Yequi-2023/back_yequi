@@ -9,7 +9,7 @@ class Realizar_historial():
     def ejecutar_historial(self):
         conn = get_db()
         cursor = conn.cursor()
-        query = "SELECT cuenta_origen, descripcion, monto, cuenta_destino FROM tbl_historiales WHERE cuenta_origen={};".format(self.usuario)
+        query = "SELECT cuenta_origen, descripcion, monto, cuenta_destino FROM tbl_historiales WHERE cuenta_origen={} OR cuenta_destino={} ;".format(self.usuario,self.usuario)
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
