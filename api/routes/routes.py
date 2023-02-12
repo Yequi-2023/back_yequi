@@ -7,6 +7,7 @@ from schemas.crear_cuenta import CapturaDatos3, CrearUsuario
 from schemas.recaudos import Captura_recaudo, Realizar_recaudo
 from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
+from schemas.codigo import Codigo_retiro, Codigos
 import json
 
 
@@ -156,4 +157,16 @@ async def view_datos(usuario: int):
         else:
             return informacion
     except ExceptionCustumizada:
-        return "Pago fallido"
+        return "Sin historial para mostrar"
+
+@mi_api_router.post("/Codigo")
+async def view_datos(codigo: Codigos):
+    try:
+        rta_mostrar = Codigo_retiro(codigo)
+        informacion = rta_mostrar.enviar_codigo()
+        if informacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return informacion
+    except ExceptionCustumizada:
+        return "Codigo fallido"

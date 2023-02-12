@@ -22,7 +22,7 @@ class LoginUsuario:
         query = f"""SELECT public.tbl_usuarios.pk_id_celular, public.tbl_usuarios.nombre, public.tbl_usuarios.pass, public.tbl_usuarios.email, 
             public.tbl_usuarios.saldo, public.tbl_usuarios.rol
             FROM public.tbl_usuarios
-            WHERE public.tbl_usuarios.pk_id_celular = '{self.usuario}' AND public.tbl_usuarios.pass = '{self.contrasena}'"""
+            WHERE public.tbl_usuarios.pk_id_celular = '{self.usuario}' AND public.tbl_usuarios.pass = '{self.contrasena}' AND public.tbl_usuarios.rol='usuario'"""
         cursor.execute(query)
         result = cursor.fetchall()
         get_close_db(conn)
