@@ -107,11 +107,12 @@ async def view_datos():
 async def view_datos(pago: Captura_pago):
     try:
         rta_mostrar = Realizar_pago(pago)
-        informacion = rta_mostrar.ejecutar_pago()
-        if informacion == []:
-            raise ExceptionCustumizada('')
-        else:
+        validaciones = rta_mostrar.validar_saldo()
+        if validaciones != []:
+            informacion = rta_mostrar.ejecutar_pago()
             return informacion
+        else:
+            raise ExceptionCustumizada('')
     except ExceptionCustumizada:
         return "Pago fallido"
 
