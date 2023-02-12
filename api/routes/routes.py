@@ -152,4 +152,4 @@ async def view_datos(usuario: int):
         else:
             return informacion
     except ExceptionCustumizada:
-        return "Pago fallido"
+        return "Sin historial para mostrar"
