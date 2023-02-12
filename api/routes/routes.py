@@ -67,7 +67,7 @@ async def view_datos(transferencia: Captura_transferencia):
         else:
             raise ExceptionCustumizada('')
     except ExceptionCustumizada:
-        return "Transferencia Fallida"
+        return "Cuenta destino no existe"
 
 
 @mi_api_router.post("/crear_usuario")

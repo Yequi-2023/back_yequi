@@ -4,10 +4,12 @@ from db.conection import get_db, get_close_db
 
 class Captura_transferencia(BaseModel):
     """Captura datos de la transferencia"""
-    usuario_origen: int
-    usuario_destino: int
     monto: int
     descripcion: str
+    usuario_origen: int
+    usuario_destino: int
+    
+    
 
 class Realizar_tranfer():
     """Clase para realizar la transferencia directamente"""
