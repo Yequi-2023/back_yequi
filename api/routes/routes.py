@@ -163,10 +163,11 @@ async def view_datos(usuario: int):
 async def view_datos(codigo: Codigos):
     try:
         rta_mostrar = Codigo_retiro(codigo)
-        informacion = rta_mostrar.enviar_codigo()
-        if informacion == []:
+        validacion = rta_mostrar.validar_contrasena()        
+        if validacion == []:
             raise ExceptionCustumizada('')
         else:
-            return informacion
+            rta_mostrar.enviar_codigo()
+            return "Codigo generado"
     except ExceptionCustumizada:
         return "Codigo fallido"
