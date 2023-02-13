@@ -18,7 +18,7 @@ class Realizar_retiro():
     def ejecutar_retiro(self):
         conn = get_db()
         cursor = conn.cursor()
-        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND codigo={}".format(self.usuario,self.referencia)
+        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND (public.tbl_usuarios.saldo >= '{}') AND codigo!=999999 AND codigo={}".format(self.usuario,self.monto,self.referencia)
         cursor.execute(query2)
         result = cursor.fetchall()
         if len(result)>0:
