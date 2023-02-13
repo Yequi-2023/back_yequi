@@ -7,6 +7,7 @@ class Captura_retiro(BaseModel):
     usuario: int
     codigo: int
     monto: int
+    usuario_origen: int
 
 class Realizar_retiro():
     """Clase para realizar el pago directamente"""
@@ -14,6 +15,7 @@ class Realizar_retiro():
         self.monto=modelo.monto
         self.usuario=modelo.usuario
         self.referencia=modelo.codigo
+        self.usuario_origen = modelo.usuario_origen
 
     def ejecutar_retiro(self):
         conn = get_db()
@@ -23,7 +25,7 @@ class Realizar_retiro():
         result = cursor.fetchall()
         if len(result)>0:
             print(result[0][0])
-            query = "INSERT INTO tbl_retiros (monto,fk_id_usuario,referencia) VALUES({},{},{})".format(self.monto,self.usuario,self.referencia)
+            query = "INSERT INTO tbl_retiros (monto,fk_id_usuario,referencia) VALUES({},{},{})".format(self.monto,self.usuario,self.usuario_origen)
             cursor.execute(query)
             conn.commit()
             get_close_db(conn)
