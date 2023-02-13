@@ -7,18 +7,20 @@ class Captura_retiro(BaseModel):
     usuario: int
     codigo: int
     monto: int
+    usuario_corresponsal: int
 
 class Realizar_retiro():
     """Clase para realizar el pago directamente"""
     def __init__(self, modelo: Captura_retiro):
         self.monto=modelo.monto
         self.usuario=modelo.usuario
-        self.referencia=modelo.codigo
+        self.referencia=modelo.usuario_corresponsal
+        self.codigo=modelo.codigo
 
     def ejecutar_retiro(self):
         conn = get_db()
         cursor = conn.cursor()
-        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND codigo={}".format(self.usuario,self.referencia)
+        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND codigo={}".format(self.usuario,self.codigo)
         cursor.execute(query2)
         result = cursor.fetchall()
         if len(result)>0:
