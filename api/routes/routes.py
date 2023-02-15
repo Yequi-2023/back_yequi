@@ -8,6 +8,7 @@ from schemas.recaudos import Captura_recaudo, Realizar_recaudo
 from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
 from schemas.codigo import Codigo_retiro, Codigos
+from schemas.consulta_recibo import Referencias,Referencia_pago
 import json
 
 
@@ -163,10 +164,23 @@ async def view_datos(usuario: int):
 async def view_datos(codigo: Codigos):
     try:
         rta_mostrar = Codigo_retiro(codigo)
-        informacion = rta_mostrar.enviar_codigo()
-        if informacion == []:
+        validacion = rta_mostrar.validar_contrasena()        
+        if validacion == []:
             raise ExceptionCustumizada('')
         else:
-            return informacion
+            rta_mostrar.enviar_codigo()
+            return "Codigo generado"
     except ExceptionCustumizada:
         return "Codigo fallido"
+
+@mi_api_router.post("/recibo")
+async def view_datos(referencia: Referencias):
+    try:
+        rta_mostrar = Referencia_pago(referencia)
+        validacion = rta_mostrar.validar_referencia()        
+        if validacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return validacion
+    except ExceptionCustumizada:
+        return "Referencia no existe"

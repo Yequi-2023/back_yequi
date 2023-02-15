@@ -7,25 +7,25 @@ class Captura_retiro(BaseModel):
     usuario: int
     codigo: int
     monto: int
-    usuario_corresponsal: int
+    usuario_origen: int
 
 class Realizar_retiro():
     """Clase para realizar el pago directamente"""
     def __init__(self, modelo: Captura_retiro):
         self.monto=modelo.monto
         self.usuario=modelo.usuario
-        self.referencia=modelo.usuario_corresponsal
-        self.codigo=modelo.codigo
+        self.referencia=modelo.codigo
+        self.usuario_origen = modelo.usuario_origen
 
     def ejecutar_retiro(self):
         conn = get_db()
         cursor = conn.cursor()
-        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND codigo={}".format(self.usuario,self.codigo)
+        query2 = "SELECT codigo FROM public.tbl_usuarios WHERE pk_id_celular={} AND (public.tbl_usuarios.saldo >= '{}') AND codigo!=999999 AND codigo={}".format(self.usuario,self.monto,self.referencia)
         cursor.execute(query2)
         result = cursor.fetchall()
         if len(result)>0:
             print(result[0][0])
-            query = "INSERT INTO tbl_retiros (monto,fk_id_usuario,referencia) VALUES({},{},{})".format(self.monto,self.usuario,self.referencia)
+            query = "INSERT INTO tbl_retiros (monto,fk_id_usuario,referencia) VALUES({},{},{})".format(self.monto,self.usuario,self.usuario_origen)
             cursor.execute(query)
             conn.commit()
             get_close_db(conn)
