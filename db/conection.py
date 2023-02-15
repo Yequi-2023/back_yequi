@@ -7,7 +7,11 @@ def get_db():
         host='localhost',
         database = 'yequinuevo',
         user='postgres',
+<<<<<<< HEAD
         password='admin'
+=======
+        password='123456789'
+>>>>>>> 03e55f0fe8a19db63935278cae46520e9375c7ed
     )
     return conn
 
