@@ -9,6 +9,7 @@ from schemas.retiros import Captura_retiro, Realizar_retiro
 from schemas.historial import Realizar_historial
 from schemas.codigo import Codigo_retiro, Codigos
 from schemas.consulta_recibo import Referencias,Referencia_pago
+from schemas.validar_credito import Creditos, Referencia_credito
 import json
 
 
@@ -184,3 +185,15 @@ async def view_datos(referencia: Referencias):
             return validacion
     except ExceptionCustumizada:
         return "Referencia no existe"
+
+@mi_api_router.post("/creditos")
+async def view_datos(referencia: Creditos):
+    try:
+        rta_mostrar = Referencia_credito(referencia)
+        validacion = rta_mostrar.validar_referencia()        
+        if validacion == []:
+            raise ExceptionCustumizada('')
+        else:
+            return validacion
+    except ExceptionCustumizada:
+        return "Referencia de credito no existe"
